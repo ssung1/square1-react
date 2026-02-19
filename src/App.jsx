@@ -1,34 +1,135 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const degToRad = (degrees) => (degrees * Math.PI) / 180
+
+const rotatePoint = (point, radians) => ({
+  x: point.x * Math.cos(radians) - point.y * Math.sin(radians),
+  y: point.x * Math.sin(radians) + point.y * Math.cos(radians),
+})
+
+const getDiamondGeometry = (longSideLength) => {
+  const primary = longSideLength
+  const secondary = longSideLength / Math.sqrt(2)
+
+  const points = [{ x: 0, y: 0 }]
+  const edges = [
+    { length: primary, angleDeg: 30 },
+    { length: secondary, angleDeg: 105 },
+    { length: secondary, angleDeg: 195 },
+  ]
+
+  edges.forEach((edge) => {
+    const previous = points[points.length - 1]
+    points.push({
+      x: previous.x + edge.length * Math.cos(degToRad(edge.angleDeg)),
+      y: previous.y + edge.length * Math.sin(degToRad(edge.angleDeg)),
+    })
+  })
+
+  const center = {
+    x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+    y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
+  }
+
+  const sixtyVertexDirection = Math.atan2(
+    points[0].y - center.y,
+    points[0].x - center.x,
+  )
+
+  const orientDownRotation = -Math.PI / 2 - sixtyVertexDirection
+  const orientedPoints = points.map((point) => rotatePoint(point, orientDownRotation))
+
+  const screenPoints = orientedPoints.map((point) => ({
+    x: point.x,
+    y: -point.y,
+  }))
+
+  const xs = screenPoints.map((point) => point.x)
+  const ys = screenPoints.map((point) => point.y)
+  const minX = Math.min(...xs)
+  const maxX = Math.max(...xs)
+  const minY = Math.min(...ys)
+  const maxY = Math.max(...ys)
+
+  const width = maxX - minX
+  const height = maxY - minY
+
+  const clipPath = `polygon(${screenPoints
+    .map((point) => {
+      const xPercent = ((point.x - minX) / width) * 100
+      const yPercent = ((point.y - minY) / height) * 100
+      return `${xPercent}% ${yPercent}%`
+    })
+    .join(', ')})`
+
+  return {
+    clipPath,
+    width,
+    height,
+    aspectRatio: `${width} / ${height}`,
+  }
+}
+
+const getTriangleDimensionsFromSide = (sideLength, apexAngleDeg = 30) => {
+  const halfApexRad = degToRad(apexAngleDeg / 2)
+
+  return {
+    width: 2 * sideLength * Math.sin(halfApexRad),
+    height: sideLength * Math.cos(halfApexRad),
+  }
+}
+
+function Triangle({ rotation = 0, sideLength = 176 }) {
+  const { width, height } = getTriangleDimensionsFromSide(sideLength)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div
+      className="triangle"
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+        transform: `rotate(${rotation}deg)`,
+      }}
+      aria-label="triangle shape"
+    />
+  )
+}
+
+function Diamond({ rotation = 0, longSideLength = 176 }) {
+  const diamondGeometry = getDiamondGeometry(longSideLength)
+
+  return (
+    <div
+      className="diamond"
+      style={{
+        width: `${diamondGeometry.width}px`,
+        height: `${diamondGeometry.height}px`,
+        transform: `rotate(${rotation}deg)`,
+        clipPath: diamondGeometry.clipPath,
+        aspectRatio: diamondGeometry.aspectRatio,
+      }}
+      aria-label="diamond shape"
+    />
+  )
+}
+
+function App() {
+  const triangleRotation = 0
+  const triangleSideLength = 176
+  const diamondRotation = 45
+  const diamondLongSideLength = 176
+
+  return (
+    <main className="home">
+      <h1>CSS Triangle + Diamond</h1>
+      <div className="triangles-row">
+        <Triangle rotation={triangleRotation} sideLength={triangleSideLength} />
+        <Diamond
+          rotation={diamondRotation}
+          longSideLength={diamondLongSideLength}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </main>
   )
 }
 
