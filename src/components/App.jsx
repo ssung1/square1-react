@@ -23,7 +23,7 @@ import {
 function convertToFaceShapes(blocks) {
   return blocks.map(block => ({
       shape: block.shape.shape,
-      color: block.faceColor
+      color: block.faceColor,
   }))
 }
 

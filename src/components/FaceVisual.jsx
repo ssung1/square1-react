@@ -91,6 +91,7 @@ function Triangle({ rotation = 0, sideLength = 176, color = '#646cff' }) {
         width: `${width}px`,
         height: `${height}px`,
         transform: `rotate(${rotation}deg)`,
+        color
       }}
       aria-label="triangle shape"
     >
