@@ -1,17 +1,44 @@
 import './App.css'
 import FaceVisual from './FaceVisual'
+import {
+  blockTopNorth,
+  blockTopNorthEast,
+  blockTopEast,
+  blockTopSouthEast,
+  blockTopSouth,
+  blockTopSouthWest,
+  blockTopWest,
+  blockTopNorthWest,
+
+  blockBottomNorth,
+  blockBottomNorthEast,
+  blockBottomEast,
+  blockBottomSouthEast,
+  blockBottomSouth,
+  blockBottomSouthWest,
+  blockBottomWest,
+  blockBottomNorthWest
+} from '../block';
+
+function convertToFaceShapes(blocks) {
+  return blocks.map(block => ({
+      shape: block.shape.shape,
+      color: block.faceColor
+  }))
+}
 
 function App() {
-  const faceShapes = [
-    { shape: 'triangle', color: 'green' },
-    { shape: 'diamond', color: 'green' },
-    { shape: 'triangle', color: 'green' },
-    { shape: 'diamond', color: 'green' },
-    { shape: 'triangle', color: 'green' },
-    { shape: 'diamond', color: 'green' },
-    { shape: 'triangle', color: 'green' },
-    { shape: 'diamond', color: 'green' },
+  const blocks = [
+    blockTopNorth,
+    blockTopNorthEast,
+    blockTopEast,
+    blockTopSouthEast,
+    blockTopSouth,
+    blockTopSouthWest,
+    blockTopWest,
+    blockTopNorthWest
   ]
+  const faceShapes = convertToFaceShapes(blocks)
 
   return (
     <main className="home">
