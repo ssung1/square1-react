@@ -1,5 +1,5 @@
 import './App.css'
-import Face from './Face'
+import FaceVisual from './FaceVisual'
 
 function App() {
   const faceShapes = [
@@ -17,8 +17,8 @@ function App() {
     <main className="home">
       <h1>CSS Triangle + Diamond</h1>
       <div className="faces-row">
-        <Face shapes={faceShapes} />
-        <Face shapes={faceShapes} />
+        <FaceVisual shapes={faceShapes} />
+        <FaceVisual shapes={faceShapes} />
       </div>
     </main>
   )

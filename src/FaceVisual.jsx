@@ -188,7 +188,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, diamondLong
   })
 }
 
-function Face({
+function FaceVisual({
   shapes,
   centerX = 220,
   centerY = 220,
@@ -205,4 +205,4 @@ function Face({
   return <div className="face-circle">{faceShapes}</div>
 }
 
-export default Face
+export default FaceVisual
