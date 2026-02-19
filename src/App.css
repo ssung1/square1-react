@@ -7,10 +7,15 @@
   gap: 1.5rem;
 }
 
-.triangles-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.face-circle {
+  width: 440px;
+  height: 440px;
+  position: relative;
+}
+
+.face-shape {
+  position: absolute;
+  transform: translate(-50%, -50%);
 }
 
 .triangle {

@@ -67,6 +67,10 @@ const getDiamondGeometry = (longSideLength) => {
     width,
     height,
     aspectRatio: `${width} / ${height}`,
+    inwardOffset: {
+      x: screenPoints[0].x - (minX + width / 2),
+      y: screenPoints[0].y - (minY + height / 2),
+    },
   }
 }
 
@@ -113,21 +117,68 @@ function Diamond({ rotation = 0, longSideLength = 176 }) {
   )
 }
 
-function App() {
-  const triangleRotation = 0
+function arrangeFace(shapes) {
+  const centerX = 220
+  const centerY = 220
   const triangleSideLength = 176
-  const diamondRotation = 45
   const diamondLongSideLength = 176
+  const triangleDimensions = getTriangleDimensionsFromSide(triangleSideLength)
+  const diamondGeometry = getDiamondGeometry(diamondLongSideLength)
+
+  return shapes.map((shape, index) => {
+    const angle = -Math.PI / 2 + (2 * Math.PI * index) / shapes.length
+    const towardCenterAngleDeg = (angle * 180) / Math.PI + 180
+    const inwardRotation = towardCenterAngleDeg - 90
+
+    let inwardOffset = { x: 0, y: 0 }
+
+    if (shape === 'triangle') {
+      inwardOffset = { x: 0, y: triangleDimensions.height / 2 }
+    }
+
+    if (shape === 'diamond') {
+      inwardOffset = diamondGeometry.inwardOffset
+    }
+
+    const rotatedOffset = rotatePoint(inwardOffset, degToRad(inwardRotation))
+    const x = centerX - rotatedOffset.x
+    const y = centerY - rotatedOffset.y
+
+    let shapeElement = null
+
+    if (shape === 'triangle') {
+      shapeElement = <Triangle rotation={inwardRotation} sideLength={triangleSideLength} />
+    }
+
+    if (shape === 'diamond') {
+      shapeElement = <Diamond rotation={inwardRotation} longSideLength={diamondLongSideLength} />
+    }
+
+    if (!shapeElement) {
+      return null
+    }
+
+    return (
+      <div
+        key={`${shape}-${index}`}
+        className="face-shape"
+        style={{ left: `${x}px`, top: `${y}px` }}
+      >
+        {shapeElement}
+      </div>
+    )
+  })
+}
+
+function App() {
+  const faceShapes = arrangeFace(['triangle', 'diamond', 'triangle', 'diamond', 'triangle', 'diamond', 'triangle', 'diamond'])
+  // const faceShapes = arrangeFace(['triangle', 'triangle', 'triangle', 'triangle', 'diamond', 'diamond', 'diamond', 'diamond'])
 
   return (
     <main className="home">
       <h1>CSS Triangle + Diamond</h1>
-      <div className="triangles-row">
-        <Triangle rotation={triangleRotation} sideLength={triangleSideLength} />
-        <Diamond
-          rotation={diamondRotation}
-          longSideLength={diamondLongSideLength}
-        />
+      <div className="face-circle">
+        {faceShapes}
       </div>
     </main>
   )
