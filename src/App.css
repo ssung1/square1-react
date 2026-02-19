@@ -7,6 +7,12 @@
   gap: 1.5rem;
 }
 
+.faces-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .face-circle {
   width: 440px;
   height: 440px;

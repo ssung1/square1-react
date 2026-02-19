@@ -219,8 +219,13 @@ function App() {
   return (
     <main className="home">
       <h1>CSS Triangle + Diamond</h1>
-      <div className="face-circle">
-        {faceShapes}
+      <div className="faces-row">
+        <div className="face-circle">
+          {faceShapes}
+        </div>
+        <div className="face-circle">
+          {faceShapes}
+        </div>
       </div>
     </main>
   )
