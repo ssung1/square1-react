@@ -83,7 +83,7 @@ const getTriangleDimensionsFromSide = (sideLength, apexAngleDeg = 30) => {
   }
 }
 
-function Triangle({ rotation = 0, sideLength = 176 }) {
+function Triangle({ rotation = 0, sideLength = 176, color = '#646cff' }) {
   const { width, height } = getTriangleDimensionsFromSide(sideLength)
 
   return (
@@ -95,11 +95,13 @@ function Triangle({ rotation = 0, sideLength = 176 }) {
         transform: `rotate(${rotation}deg)`,
       }}
       aria-label="triangle shape"
-    />
+    >
+      <div className="triangle-fill" style={{ background: color }} />
+    </div>
   )
 }
 
-function Diamond({ rotation = 0, longSideLength = 176 }) {
+function Diamond({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
   const diamondGeometry = getDiamondGeometry(longSideLength)
 
   return (
@@ -113,7 +115,15 @@ function Diamond({ rotation = 0, longSideLength = 176 }) {
         aspectRatio: diamondGeometry.aspectRatio,
       }}
       aria-label="diamond shape"
-    />
+    >
+      <div
+        className="diamond-fill"
+        style={{
+          clipPath: diamondGeometry.clipPath,
+          background: color,
+        }}
+      />
+    </div>
   )
 }
 
@@ -125,7 +135,9 @@ function arrangeFace(shapes) {
   const triangleDimensions = getTriangleDimensionsFromSide(triangleSideLength)
   const diamondGeometry = getDiamondGeometry(diamondLongSideLength)
 
-  return shapes.map((shape, index) => {
+  return shapes.map((item, index) => {
+    const shape = item.shape
+    const color = item.color
     const angle = -Math.PI / 2 + (2 * Math.PI * index) / shapes.length
     const towardCenterAngleDeg = (angle * 180) / Math.PI + 180
     const inwardRotation = towardCenterAngleDeg - 90
@@ -147,11 +159,23 @@ function arrangeFace(shapes) {
     let shapeElement = null
 
     if (shape === 'triangle') {
-      shapeElement = <Triangle rotation={inwardRotation} sideLength={triangleSideLength} />
+      shapeElement = (
+        <Triangle
+          rotation={inwardRotation}
+          sideLength={triangleSideLength}
+          color={color}
+        />
+      )
     }
 
     if (shape === 'diamond') {
-      shapeElement = <Diamond rotation={inwardRotation} longSideLength={diamondLongSideLength} />
+      shapeElement = (
+        <Diamond
+          rotation={inwardRotation}
+          longSideLength={diamondLongSideLength}
+          color={color}
+        />
+      )
     }
 
     if (!shapeElement) {
@@ -171,8 +195,26 @@ function arrangeFace(shapes) {
 }
 
 function App() {
-  const faceShapes = arrangeFace(['triangle', 'diamond', 'triangle', 'diamond', 'triangle', 'diamond', 'triangle', 'diamond'])
-  // const faceShapes = arrangeFace(['triangle', 'triangle', 'triangle', 'triangle', 'diamond', 'diamond', 'diamond', 'diamond'])
+  const faceShapes = arrangeFace([
+    { shape: 'triangle', color: 'green' },
+    { shape: 'diamond', color: 'green' },
+    { shape: 'triangle', color: 'green' },
+    { shape: 'diamond', color: 'green' },
+    { shape: 'triangle', color: 'green' },
+    { shape: 'diamond', color: 'green' },
+    { shape: 'triangle', color: 'green' },
+    { shape: 'diamond', color: 'green' },
+  ])
+  // const faceShapes = arrangeFace([
+  //   { shape: 'triangle' },
+  //   { shape: 'triangle' },
+  //   { shape: 'triangle' },
+  //   { shape: 'triangle' },
+  //   { shape: 'diamond' },
+  //   { shape: 'diamond' },
+  //   { shape: 'diamond' },
+  //   { shape: 'diamond' },
+  // ])
 
   return (
     <main className="home">

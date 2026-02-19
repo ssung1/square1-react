@@ -19,12 +19,27 @@
 }
 
 .triangle {
-  background: #646cff;
+  position: relative;
+  background: #000;
   transform-origin: center;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 
+.triangle-fill {
+  position: absolute;
+  inset: 2px;
+  background: #646cff;
+  clip-path: inherit;
+}
+
 .diamond {
-  background: #61dafb;
+  position: relative;
+  background: #000;
   transform-origin: center;
+}
+
+.diamond-fill {
+  position: absolute;
+  inset: 2px;
+  background: #61dafb;
 }
