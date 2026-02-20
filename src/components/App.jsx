@@ -22,7 +22,7 @@ function convertToDisplayableShapes(face) {
 function App() {
   const cubeVisuals = [
     cube,
-    cube.execute('00 03 03 '),
+    cube.execute('00 03 02 03 '),
   ].map((cubeState, index) => (
     <CubeVisual key={index} {...convertToCubeComponent(cubeState)} />
   ))
