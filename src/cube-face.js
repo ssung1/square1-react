@@ -19,7 +19,6 @@ import {
 } from './block';
 
 export const initialTopBlocks = [
-  blockTopNorth,
   blockTopNorthEast,
   blockTopEast,
   blockTopSouthEast,
@@ -27,10 +26,10 @@ export const initialTopBlocks = [
   blockTopSouthWest,
   blockTopWest,
   blockTopNorthWest,
+  blockTopNorth,
 ]
 
 export const initialBottomBlocks = [
-  blockBottomNorth,
   blockBottomNorthEast,
   blockBottomEast,
   blockBottomSouthEast,
@@ -38,6 +37,7 @@ export const initialBottomBlocks = [
   blockBottomSouthWest,
   blockBottomWest,
   blockBottomNorthWest,
+  blockBottomNorth,
 ]
 
 // this is the amount of each rotation step

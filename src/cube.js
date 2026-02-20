@@ -6,3 +6,5 @@ export class Cube {
     this.bottomFace = bottomFace;
   }
 }
+
+export const cube = new Cube(topFace, bottomFace);

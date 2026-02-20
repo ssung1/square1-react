@@ -1,6 +1,6 @@
 import './App.css'
 import FaceVisual from './FaceVisual'
-import { initialTopBlocks, initialBottomBlocks } from '../cube';
+import { cube } from '../cube';
 
 function convertToFaceShapes(blocks) {
   return blocks.map(block => ({
@@ -10,16 +10,15 @@ function convertToFaceShapes(blocks) {
 }
 
 function App() {
-  const topFaceShapes = convertToFaceShapes(initialTopBlocks);
-  const bottomFaceShapes = convertToFaceShapes(initialBottomBlocks);
-  // const topFaceShapes = convertToFaceShapes(blocks)
+  const topFaceShapes = convertToFaceShapes(cube.topFace.blocks);
+  const bottomFaceShapes = convertToFaceShapes(cube.bottomFace.blocks);
 
   return (
     <main className="home">
       <h1>CSS Triangle + Diamond</h1>
       <div className="faces-row">
-        <FaceVisual shapes={topFaceShapes} />
-        <FaceVisual shapes={bottomFaceShapes} />
+        <FaceVisual shapes={topFaceShapes} displayRotation="45"/>
+        <FaceVisual shapes={bottomFaceShapes} displayRotation="45"/>
       </div>
     </main>
   )

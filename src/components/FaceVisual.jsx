@@ -191,10 +191,11 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, diamondLong
 
 function FaceVisual({
   shapes,
-  centerX = 220,
-  centerY = 220,
+  centerX = 250,
+  centerY = 250,
   triangleSideLength = 176,
   diamondLongSideLength = 176,
+  displayRotation = 0,
 }) {
   const faceShapes = arrangeFace(shapes, {
     centerX,
@@ -203,7 +204,17 @@ function FaceVisual({
     diamondLongSideLength,
   })
 
-  return <div className="face-circle">{faceShapes}</div>
+  return (
+    <div
+      className="face-circle"
+      style={{
+        transform: `rotate(${displayRotation}deg)`,
+        transformOrigin: 'center',
+      }}
+    >
+      {faceShapes}
+    </div>
+  )
 }
 
 export default FaceVisual
