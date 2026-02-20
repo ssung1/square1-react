@@ -2,22 +2,25 @@ import { CubeFace, topFace, bottomFace } from './cube-face';
 import { rotate } from './angle';
 
 export class Cube {
-  constructor(topFace, bottomFace) {
+  constructor(topFace, bottomFace, executionHistory) {
     this.topFace = topFace;
     this.bottomFace = bottomFace;
+    this.executionHistory = executionHistory || [];
   }
 
   rotateTop(angle) {
     return new Cube(
       this.topFace.rotate(angle),
-      this.bottomFace
+      this.bottomFace,
+      this.executionHistory
     );
   }
 
   rotateBottom(angle) {
     return new Cube(
       this.topFace,
-      this.bottomFace.rotate(angle)
+      this.bottomFace.rotate(angle),
+      this.executionHistory
     );
   }
 
@@ -26,10 +29,6 @@ export class Cube {
   }
 
   separateByFlipPlane() {
-    console.log('flipPlane', this.topFace.flipPlane, rotate(this.topFace.flipPlane, 180));
-
-    console.log('topFace counter', this.topFace.blocks.map(block => block.edgeAngleCounterClockwise()));
-    console.log('topFace clock', this.topFace.blocks.map(block => block.edgeAngleClockwise()));
     const topBlocksRightOfFlipPlane = this.topFace.blocks.filter(block =>
       block.edgeAngleCounterClockwise() >= this.topFace.flipPlane &&
       block.edgeAngleCounterClockwise() < (rotate(this.topFace.flipPlane, 180))
@@ -65,16 +64,65 @@ export class Cube {
       bottomBlocksLeftOfFlipPlane,
     } = this.separateByFlipPlane();
 
-    console.log('topBlocksLeftOfFlipPlane', topBlocksLeftOfFlipPlane);
-    console.log('topBlocksRightOfFlipPlane', topBlocksRightOfFlipPlane);
-    console.log('bottomBlocksLeftOfFlipPlane', bottomBlocksLeftOfFlipPlane);
-    console.log('bottomBlocksRightOfFlipPlane', bottomBlocksRightOfFlipPlane);
-
     return new Cube(
       new CubeFace([...topBlocksLeftOfFlipPlane, ...bottomBlocksRightOfFlipPlane.map(block => block.flip())]),
-      new CubeFace([...bottomBlocksLeftOfFlipPlane, ...topBlocksRightOfFlipPlane.map(block => block.flip())])
+      new CubeFace([...bottomBlocksLeftOfFlipPlane, ...topBlocksRightOfFlipPlane.map(block => block.flip())]),
+      this.executionHistory
     );
+  }
+
+  // operations is defined as a sequence of 2 rotations plus a flip, encoded into three characters
+  // 1. rotation of top face: 0 to 9, then A and, B, representing 0 to 330 degrees in 30 degree increments
+  // 2. rotation of bottom face: 0 to 9, then A and, B, representing 0 to 330 degrees in 30 degree increments
+  // 3. flip: a space character
+  execute(operations) {
+    let currentCube = this;
+
+    for (let index = 0; index < operations.length; index += 3) {
+      console.log('Executing operation:', operations.slice(index, index + 3));
+      if (index + 2 >= operations.length) {
+        return currentCube;
+      }
+
+      const topRotationChar = operations[index];
+      const bottomRotationChar = operations[index + 1];
+      const flipChar = operations[index + 2];
+
+      if (flipChar !== ' ') {
+        return currentCube;
+      }
+
+      const topRotationStep = parseInt(topRotationChar, 16);
+      const bottomRotationStep = parseInt(bottomRotationChar, 16);
+
+      if (
+        Number.isNaN(topRotationStep) ||
+        Number.isNaN(bottomRotationStep) ||
+        topRotationStep < 0 ||
+        topRotationStep > 11 ||
+        bottomRotationStep < 0 ||
+        bottomRotationStep > 11
+      ) {
+        return currentCube;
+      }
+
+      console.log('Current history so far:', currentCube.executionHistory);
+      console.log('Executing operation for reals:', operations.slice(index, index + 3));
+      console.log('new history?', [...currentCube.executionHistory, operations.slice(index, index + 3)]);
+      const newCube = currentCube
+          .rotateTop(topRotationStep * 30)
+          .rotateBottom(bottomRotationStep * 30)
+          .flip();
+
+      currentCube = new Cube(
+        newCube.topFace,
+        newCube.bottomFace,
+        [...currentCube.executionHistory, operations.slice(index, index + 3)]
+      );
+    }
+
+    return currentCube;
   }
 }
 
-export const cube = new Cube(topFace, bottomFace);
+export const cube = new Cube(topFace, bottomFace, []);

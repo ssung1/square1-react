@@ -1,23 +1,14 @@
 import './App.css'
-import FaceVisual from './FaceVisual'
-import { Cube, cube } from '../cube';
-import { triangle } from '../block-shape';
-import { green } from '../block-color';
-import { useEffect, useState } from 'react';
+import CubeVisual from './CubeVisual'
+import { cube } from '../cube';
 
 function convertToCubeComponent(cube) {
-  var borderColor = 'black';
-  if (cube.isFlippable()) {
-    borderColor = 'red';
+  return {
+    executionHistory:  cube.executionHistory,
+    flippable:  cube.isFlippable(),
+    topFaceShapes:  convertToDisplayableShapes(cube.topFace),
+    bottomFaceShapes:  convertToDisplayableShapes(cube.bottomFace),
   }
-  return (
-    <div>
-      <div className="faces-row">
-        <FaceVisual shapes={convertToDisplayableShapes(cube.topFace)} borderColor={borderColor} />
-        <FaceVisual shapes={convertToDisplayableShapes(cube.bottomFace)} borderColor={borderColor} />
-      </div>
-    </div>
-  )
 }
 
 function convertToDisplayableShapes(face) {
@@ -29,11 +20,17 @@ function convertToDisplayableShapes(face) {
 }
 
 function App() {
+  const cubeVisuals = [
+    cube,
+    cube.execute('00 03 03 '),
+  ].map((cubeState, index) => (
+    <CubeVisual key={index} {...convertToCubeComponent(cubeState)} />
+  ))
+
   return (
     <main className="home">
       <h1>CSS Triangle + Kite</h1>
-      {convertToCubeComponent(cube)}
-      {convertToCubeComponent(cube.flip())}
+      {cubeVisuals}
     </main>
   )
 }
