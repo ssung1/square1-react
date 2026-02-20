@@ -38,13 +38,13 @@
   clip-path: inherit;
 }
 
-.diamond {
+.kite {
   position: relative;
   background: #000;
   transform-origin: center;
 }
 
-.diamond-fill {
+.kite-fill {
   position: absolute;
   inset: 2px;
   background: #61dafb;

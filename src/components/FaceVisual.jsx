@@ -5,7 +5,7 @@ const rotatePoint = (point, radians) => ({
   y: point.x * Math.sin(radians) + point.y * Math.cos(radians),
 })
 
-const getDiamondGeometry = (longSideLength) => {
+const getKiteGeometry = (longSideLength) => {
   const primary = longSideLength
   const secondary = longSideLength / Math.sqrt(2)
 
@@ -100,25 +100,25 @@ function Triangle({ rotation = 0, sideLength = 176, color = '#646cff' }) {
   )
 }
 
-function Diamond({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
-  const diamondGeometry = getDiamondGeometry(longSideLength)
+function Kite({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
+  const kiteGeometry = getKiteGeometry(longSideLength)
 
   return (
     <div
-      className="diamond"
+      className="kite"
       style={{
-        width: `${diamondGeometry.width}px`,
-        height: `${diamondGeometry.height}px`,
+        width: `${kiteGeometry.width}px`,
+        height: `${kiteGeometry.height}px`,
         transform: `rotate(${rotation}deg)`,
-        clipPath: diamondGeometry.clipPath,
-        aspectRatio: diamondGeometry.aspectRatio,
+        clipPath: kiteGeometry.clipPath,
+        aspectRatio: kiteGeometry.aspectRatio,
       }}
-      aria-label="diamond shape"
+      aria-label="kite shape"
     >
       <div
-        className="diamond-fill"
+        className="kite-fill"
         style={{
-          clipPath: diamondGeometry.clipPath,
+          clipPath: kiteGeometry.clipPath,
           background: color,
         }}
       />
@@ -126,9 +126,9 @@ function Diamond({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
   )
 }
 
-function arrangeFace(shapes, { centerX, centerY, triangleSideLength, diamondLongSideLength }) {
+function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSideLength }) {
   const triangleDimensions = getTriangleDimensionsFromSide(triangleSideLength)
-  const diamondGeometry = getDiamondGeometry(diamondLongSideLength)
+  const kiteGeometry = getKiteGeometry(kiteLongSideLength)
   const firstShape = shapes[0]?.shape
   const startAngleDeg = firstShape === 'triangle' ? 15 : 30
   const startAngleRad = degToRad(startAngleDeg)
@@ -146,8 +146,8 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, diamondLong
       inwardOffset = { x: 0, y: triangleDimensions.height / 2 }
     }
 
-    if (shape === 'diamond') {
-      inwardOffset = diamondGeometry.inwardOffset
+    if (shape === 'kite') {
+      inwardOffset = kiteGeometry.inwardOffset
     }
 
     const rotatedOffset = rotatePoint(inwardOffset, degToRad(inwardRotation))
@@ -166,11 +166,11 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, diamondLong
       )
     }
 
-    if (shape === 'diamond') {
+    if (shape === 'kite') {
       shapeElement = (
-        <Diamond
+        <Kite
           rotation={inwardRotation}
-          longSideLength={diamondLongSideLength}
+          longSideLength={kiteLongSideLength}
           color={color}
         />
       )
@@ -197,14 +197,14 @@ function FaceVisual({
   centerX = 250,
   centerY = 250,
   triangleSideLength = 176,
-  diamondLongSideLength = 176,
+  kiteLongSideLength = 176,
   displayRotation = 0,
 }) {
   const faceShapes = arrangeFace(shapes, {
     centerX,
     centerY,
     triangleSideLength,
-    diamondLongSideLength,
+    kiteLongSideLength,
   })
 
   return (
