@@ -1,5 +1,6 @@
 import { green, white, blue, orange, red, yellow, none  } from './block-color';
 import { triangle, kite } from './block-shape';
+import { rotate } from './angle';
 
 class Block {
   constructor(shape, angle, faceColor, sideColor1, sideColor2) {
@@ -9,8 +10,14 @@ class Block {
     this.sideColor1 = sideColor1;
     this.sideColor2 = sideColor2;
   }
-}
 
+  edgeAngleCounterClockwise() {
+    return rotate(this.angle, -this.shape.size / 2);
+  }
+  edgeAngleClockwise() {
+    return rotate(this.angle, this.shape.size / 2);
+  }
+}
 // top
 export const blockTopNorth = new Block(triangle, 0, green, red, none);
 export const blockTopNorthEast = new Block(kite, 45, green, red, blue);

@@ -16,6 +16,8 @@ function App() {
   const topFace = convertToFaceShapes(cube.topFace.blocks)
   const bottomFace = convertToFaceShapes(cube.bottomFace.blocks)
 
+  console.log('edge', cube.topFace.blocks.map(block => block.edgeAngleCounterClockwise()))
+
   return (
     <main className="home">
       <h1>CSS Triangle + Kite</h1>

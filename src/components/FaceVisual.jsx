@@ -1,3 +1,5 @@
+import { normalizeDegrees } from '../angle';
+
 const degToRad = (degrees) => (degrees * Math.PI) / 180
 
 const rotatePoint = (point, radians) => ({
@@ -136,7 +138,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSid
     const angle =
       item.angle !== undefined
         ? degToRad(item.angle) : (2 * Math.PI * index) / shapes.length
-    const towardCenterAngleDeg = (angle * 180) / Math.PI
+    const towardCenterAngleDeg = normalizeDegrees((angle * 180) / Math.PI)
 
     let inwardOffset = { x: 0, y: 0 }
 
