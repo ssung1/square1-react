@@ -129,11 +129,14 @@ function Diamond({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
 function arrangeFace(shapes, { centerX, centerY, triangleSideLength, diamondLongSideLength }) {
   const triangleDimensions = getTriangleDimensionsFromSide(triangleSideLength)
   const diamondGeometry = getDiamondGeometry(diamondLongSideLength)
+  const firstShape = shapes[0]?.shape
+  const startAngleDeg = firstShape === 'triangle' ? 15 : 30
+  const startAngleRad = degToRad(startAngleDeg)
 
   return shapes.map((item, index) => {
     const shape = item.shape
     const color = item.color
-    const angle = -Math.PI / 2 + (2 * Math.PI * index) / shapes.length
+    const angle = startAngleRad + (2 * Math.PI * index) / shapes.length
     const towardCenterAngleDeg = (angle * 180) / Math.PI + 180
     const inwardRotation = towardCenterAngleDeg - 90
 

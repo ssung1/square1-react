@@ -17,8 +17,8 @@ function App() {
     <main className="home">
       <h1>CSS Triangle + Diamond</h1>
       <div className="faces-row">
-        <FaceVisual shapes={topFaceShapes} displayRotation="45"/>
-        <FaceVisual shapes={bottomFaceShapes} displayRotation="45"/>
+        <FaceVisual shapes={topFaceShapes}/>
+        <FaceVisual shapes={bottomFaceShapes}/>
       </div>
     </main>
   )
