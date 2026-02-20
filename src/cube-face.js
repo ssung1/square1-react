@@ -46,12 +46,25 @@ export const rotationUnit = 30;
 export class CubeFace {
   // IMPORTANT:
   // the flip plane is always 15 degrees clockwise from the vertical axis
-  constructor(blocks, rotation) {
+  constructor(blocks) {
     this.flipPlane = 15;
     this.blocks = blocks;
-    this.rotation = rotation;
+  }
+
+  rotate(angle) {
+    return new CubeFace(
+      this.blocks.map(block => block.rotate(angle))
+    );
+  }
+
+  // the face is flippable if there is an edge at 15 AND if there's an edge at
+  // 195 (15 + 180)
+  isFlippable() {
+    const hasFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === this.flipPlane);
+    const hasOppositeFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === (this.flipPlane + 180) % 360);
+    return hasFlipPlaneEdge && hasOppositeFlipPlaneEdge;
   }
 }
 
-export const topFace = new CubeFace(initialTopBlocks, 0);
-export const bottomFace = new CubeFace(initialBottomBlocks, 0);
+export const topFace = new CubeFace(initialTopBlocks);
+export const bottomFace = new CubeFace(initialBottomBlocks);

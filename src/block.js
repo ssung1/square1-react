@@ -14,8 +14,19 @@ class Block {
   edgeAngleCounterClockwise() {
     return rotate(this.angle, -this.shape.size / 2);
   }
+
   edgeAngleClockwise() {
     return rotate(this.angle, this.shape.size / 2);
+  }
+
+  rotate(angle) {
+    return new Block(
+      this.shape,
+      rotate(this.angle, angle),
+      this.faceColor,
+      this.sideColor1,
+      this.sideColor2
+    );
   }
 }
 // top
