@@ -1,6 +1,42 @@
 import './App.css'
 import CubeVisual from './CubeVisual'
+import { useMemo } from 'react'
 import { cube } from '../cube';
+
+const HEX_DIGITS = '0123456789AB'
+
+function buildCommands() {
+  return HEX_DIGITS.split('').flatMap((topDigit) =>
+    HEX_DIGITS.split('').map((bottomDigit) => `${topDigit}${bottomDigit} `)
+  )
+}
+
+function breadthFirstSearch(initialCube, maxDepth = 2) {
+  const commands = buildCommands()
+  const queue = [{ cubeState: initialCube, depth: 0 }]
+  const results = [initialCube]
+
+  while (queue.length > 0) {
+    const { cubeState, depth } = queue.shift()
+
+    if (depth >= maxDepth) {
+      continue
+    }
+
+    commands.forEach((command) => {
+      const nextCubeState = cubeState.execute(command)
+
+      if (nextCubeState === cubeState) {
+        return
+      }
+
+      results.push(nextCubeState)
+      queue.push({ cubeState: nextCubeState, depth: depth + 1 })
+    })
+  }
+
+  return results
+}
 
 function convertToCubeComponent(cube) {
   return {
@@ -20,10 +56,12 @@ function convertToDisplayableShapes(face) {
 }
 
 function App() {
-  const cubeVisuals = [
-    cube,
-    cube.execute('00 03 02 03 '),
-  ].map((cubeState, index) => (
+  // breadth first search
+  const cubeStates = useMemo(() => breadthFirstSearch(cube, 2), []);
+  // one-off test
+  // const cubeStates = useMemo(() => [cube.flip()], []);
+
+  const cubeVisuals = cubeStates.map((cubeState, index) => (
     <CubeVisual key={index} {...convertToCubeComponent(cubeState)} />
   ))
 

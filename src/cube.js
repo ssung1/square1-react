@@ -106,18 +106,16 @@ export class Cube {
         return currentCube;
       }
 
-      console.log('Current history so far:', currentCube.executionHistory);
-      console.log('Executing operation for reals:', operations.slice(index, index + 3));
-      console.log('new history?', [...currentCube.executionHistory, operations.slice(index, index + 3)]);
       const rotatedCube = currentCube
           .rotateTop(topRotationStep * 30)
           .rotateBottom(bottomRotationStep * 30);
 
-      if (!rotatedCube.isFlippable()) {
-        return currentCube;
+      let newCube;
+      if (rotatedCube.isFlippable()) {
+        newCube = rotatedCube.flip();
+      } else {
+        newCube = rotatedCube;
       }
-
-      const newCube = rotatedCube.flip();
 
       currentCube = new Cube(
         newCube.topFace,
