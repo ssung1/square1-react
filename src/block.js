@@ -1,6 +1,6 @@
 import { green, white, blue, orange, red, yellow, none  } from './block-color';
 import { triangle, kite } from './block-shape';
-import { rotate } from './angle';
+import { normalizeDegrees, rotate } from './angle';
 
 class Block {
   constructor(shape, angle, faceColor, sideColor1, sideColor2) {
@@ -26,6 +26,16 @@ class Block {
       this.faceColor,
       this.sideColor1,
       this.sideColor2
+    );
+  }
+
+  flip() {
+    return new Block(
+      this.shape,
+      normalizeDegrees(210 - this.angle),
+      this.faceColor,
+      this.sideColor2,
+      this.sideColor1
     );
   }
 }

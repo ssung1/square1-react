@@ -33,7 +33,7 @@ function App() {
     <main className="home">
       <h1>CSS Triangle + Kite</h1>
       {convertToCubeComponent(cube)}
-      {convertToCubeComponent(cube.rotateTop(30))}
+      {convertToCubeComponent(cube.flip())}
     </main>
   )
 }
