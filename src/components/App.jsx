@@ -57,9 +57,9 @@ function convertToDisplayableShapes(face) {
 
 function App() {
   // breadth first search
-  const cubeStates = useMemo(() => breadthFirstSearch(cube, 2), []);
+  const cubeStatesX = useMemo(() => breadthFirstSearch(cube, 2), []);
   // one-off test
-  // const cubeStates = useMemo(() => [cube.flip()], []);
+  const cubeStates = useMemo(() => [cube.flip()], []);
 
   const cubeVisuals = cubeStates.map((cubeState, index) => (
     <CubeVisual key={index} {...convertToCubeComponent(cubeState)} />

@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react'
 import FaceVisual from './FaceVisual'
 
 export function CubeVisual({
@@ -7,7 +8,10 @@ export function CubeVisual({
   bottomFaceShapes = [],
 }) {
   const borderColor = flippable ? 'red' : 'black'
-  const executionHistoryText = executionHistory.join('')
+  const executionHistoryText = useMemo(
+    () => executionHistory.join(''),
+    [executionHistory],
+  )
 
   return (
     <div>
@@ -20,4 +24,4 @@ export function CubeVisual({
   )
 }
 
-export default CubeVisual
+export default memo(CubeVisual)

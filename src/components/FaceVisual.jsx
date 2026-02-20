@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react'
 import { normalizeDegrees } from '../angle';
 
 const degToRad = (degrees) => (degrees * Math.PI) / 180
@@ -217,13 +218,17 @@ function FaceVisual({
   borderColor = '#000',
   displayRotation = 0,
 }) {
-  const faceShapes = arrangeFace(shapes, {
-    centerX,
-    centerY,
-    triangleSideLength,
-    kiteLongSideLength,
-    borderColor,
-  })
+  const faceShapes = useMemo(
+    () =>
+      arrangeFace(shapes, {
+        centerX,
+        centerY,
+        triangleSideLength,
+        kiteLongSideLength,
+        borderColor,
+      }),
+    [shapes, centerX, centerY, triangleSideLength, kiteLongSideLength, borderColor],
+  )
 
   return (
     <div
@@ -238,4 +243,4 @@ function FaceVisual({
   )
 }
 
-export default FaceVisual
+export default memo(FaceVisual)
