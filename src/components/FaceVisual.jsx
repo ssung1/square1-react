@@ -129,16 +129,14 @@ function Kite({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
 function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSideLength }) {
   const triangleDimensions = getTriangleDimensionsFromSide(triangleSideLength)
   const kiteGeometry = getKiteGeometry(kiteLongSideLength)
-  const firstShape = shapes[0]?.shape
-  const startAngleDeg = firstShape === 'triangle' ? 15 : 30
-  const startAngleRad = degToRad(startAngleDeg)
 
   return shapes.map((item, index) => {
     const shape = item.shape
     const color = item.color
-    const angle = startAngleRad + (2 * Math.PI * index) / shapes.length
-    const towardCenterAngleDeg = (angle * 180) / Math.PI + 180
-    const inwardRotation = towardCenterAngleDeg - 90
+    const angle =
+      item.angle !== undefined
+        ? degToRad(item.angle) : (2 * Math.PI * index) / shapes.length
+    const towardCenterAngleDeg = (angle * 180) / Math.PI
 
     let inwardOffset = { x: 0, y: 0 }
 
@@ -150,7 +148,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSid
       inwardOffset = kiteGeometry.inwardOffset
     }
 
-    const rotatedOffset = rotatePoint(inwardOffset, degToRad(inwardRotation))
+    const rotatedOffset = rotatePoint(inwardOffset, degToRad(towardCenterAngleDeg))
     const x = centerX - rotatedOffset.x
     const y = centerY - rotatedOffset.y
 
@@ -159,7 +157,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSid
     if (shape === 'triangle') {
       shapeElement = (
         <Triangle
-          rotation={inwardRotation}
+          rotation={towardCenterAngleDeg}
           sideLength={triangleSideLength}
           color={color}
         />
@@ -169,7 +167,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSid
     if (shape === 'kite') {
       shapeElement = (
         <Kite
-          rotation={inwardRotation}
+          rotation={towardCenterAngleDeg}
           longSideLength={kiteLongSideLength}
           color={color}
         />
