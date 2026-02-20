@@ -28,6 +28,10 @@ export class Cube {
     return this.topFace.isFlippable() && this.bottomFace.isFlippable();
   }
 
+  isSquare() {
+    return this.topFace.isSquare() && this.bottomFace.isSquare();
+  }
+
   separateByFlipPlane() {
     const topBlocksRightOfFlipPlane = this.topFace.blocks.filter(block =>
       block.edgeAngleCounterClockwise() >= this.topFace.flipPlane &&

@@ -17,6 +17,7 @@ import {
   blockBottomWest,
   blockBottomNorthWest
 } from './block';
+import { normalizeDegrees } from './angle';
 
 export const initialTopBlocks = [
   blockTopNorthEast,
@@ -63,6 +64,36 @@ export class CubeFace {
     const hasFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === this.flipPlane);
     const hasOppositeFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === (this.flipPlane + 180) % 360);
     return hasFlipPlaneEdge && hasOppositeFlipPlaneEdge;
+  }
+
+  isSquare() {
+    const triangleAngles = this.blocks
+      .filter(block => block.shape.shape === 'triangle')
+      .map(block => normalizeDegrees(block.angle));
+    const kiteAngles = this.blocks
+      .filter(block => block.shape.shape === 'kite')
+      .map(block => normalizeDegrees(block.angle));
+
+    if (triangleAngles.length !== 4 || kiteAngles.length !== 4) {
+      return false;
+    }
+
+    const hasExactAngles = (actualAngles, expectedAngles) => {
+      const actualSet = new Set(actualAngles);
+      if (actualSet.size !== expectedAngles.length) {
+        return false;
+      }
+
+      return expectedAngles.every(angle => actualSet.has(angle));
+    };
+
+    const triangleExpectedAngles = [0, 90, 180, 270];
+    const kiteExpectedAngles = [45, 135, 225, 315];
+
+    return (
+      hasExactAngles(triangleAngles, triangleExpectedAngles) &&
+      hasExactAngles(kiteAngles, kiteExpectedAngles)
+    );
   }
 }
 
