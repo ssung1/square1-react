@@ -83,7 +83,12 @@ const getTriangleDimensionsFromSide = (sideLength, apexAngleDeg = 30) => {
   }
 }
 
-function Triangle({ rotation = 0, sideLength = 176, color = '#646cff' }) {
+function Triangle({
+  rotation = 0,
+  sideLength = 176,
+  color = '#646cff',
+  borderColor = '#000',
+}) {
   const { width, height } = getTriangleDimensionsFromSide(sideLength)
 
   return (
@@ -93,7 +98,7 @@ function Triangle({ rotation = 0, sideLength = 176, color = '#646cff' }) {
         width: `${width}px`,
         height: `${height}px`,
         transform: `rotate(${rotation}deg)`,
-        color
+        background: borderColor,
       }}
       aria-label="triangle shape"
     >
@@ -102,7 +107,12 @@ function Triangle({ rotation = 0, sideLength = 176, color = '#646cff' }) {
   )
 }
 
-function Kite({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
+function Kite({
+  rotation = 0,
+  longSideLength = 176,
+  color = '#61dafb',
+  borderColor = '#000',
+}) {
   const kiteGeometry = getKiteGeometry(longSideLength)
 
   return (
@@ -112,6 +122,7 @@ function Kite({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
         width: `${kiteGeometry.width}px`,
         height: `${kiteGeometry.height}px`,
         transform: `rotate(${rotation}deg)`,
+        background: borderColor,
         clipPath: kiteGeometry.clipPath,
         aspectRatio: kiteGeometry.aspectRatio,
       }}
@@ -128,7 +139,10 @@ function Kite({ rotation = 0, longSideLength = 176, color = '#61dafb' }) {
   )
 }
 
-function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSideLength }) {
+function arrangeFace(
+  shapes,
+  { centerX, centerY, triangleSideLength, kiteLongSideLength, borderColor },
+) {
   const triangleDimensions = getTriangleDimensionsFromSide(triangleSideLength)
   const kiteGeometry = getKiteGeometry(kiteLongSideLength)
 
@@ -162,6 +176,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSid
           rotation={towardCenterAngleDeg}
           sideLength={triangleSideLength}
           color={color}
+          borderColor={borderColor}
         />
       )
     }
@@ -172,6 +187,7 @@ function arrangeFace(shapes, { centerX, centerY, triangleSideLength, kiteLongSid
           rotation={towardCenterAngleDeg}
           longSideLength={kiteLongSideLength}
           color={color}
+          borderColor={borderColor}
         />
       )
     }
@@ -198,6 +214,7 @@ function FaceVisual({
   centerY = 250,
   triangleSideLength = 176,
   kiteLongSideLength = 176,
+  borderColor = '#000',
   displayRotation = 0,
 }) {
   const faceShapes = arrangeFace(shapes, {
@@ -205,6 +222,7 @@ function FaceVisual({
     centerY,
     triangleSideLength,
     kiteLongSideLength,
+    borderColor,
   })
 
   return (

@@ -6,10 +6,16 @@ import { green } from '../block-color';
 import { useEffect, useState } from 'react';
 
 function convertToCubeComponent(cube) {
+  var borderColor = 'black';
+  if (cube.isFlippable()) {
+    borderColor = 'red';
+  }
   return (
-    <div className="faces-row">
-      <FaceVisual shapes={convertToDisplayableShapes(cube.topFace)} />
-      <FaceVisual shapes={convertToDisplayableShapes(cube.bottomFace)} />
+    <div>
+      <div className="faces-row">
+        <FaceVisual shapes={convertToDisplayableShapes(cube.topFace)} borderColor={borderColor} />
+        <FaceVisual shapes={convertToDisplayableShapes(cube.bottomFace)} borderColor={borderColor} />
+      </div>
     </div>
   )
 }
@@ -23,19 +29,11 @@ function convertToDisplayableShapes(face) {
 }
 
 function App() {
-  const topFace = cube.topFace;
-  const bottomFace = cube.bottomFace;
-
-  const secondTopFace = topFace.rotate(30);
-  const secondBottomFace = bottomFace;
-
-  console.log(topFace.isFlippable());
-  console.log(secondTopFace.isFlippable());
   return (
     <main className="home">
       <h1>CSS Triangle + Kite</h1>
-      {convertToCubeComponent(new Cube(topFace, bottomFace))}
-      {convertToCubeComponent(new Cube(secondTopFace, secondBottomFace))}
+      {convertToCubeComponent(cube)}
+      {convertToCubeComponent(cube.rotateTop(30))}
     </main>
   )
 }
