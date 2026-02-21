@@ -18,6 +18,7 @@ import {
   blockBottomNorthWest
 } from './block';
 import { normalizeDegrees } from './angle';
+import { triangle, kite } from './block-shape';
 
 export const initialTopBlocks = [
   blockTopNorthEast,
@@ -68,10 +69,10 @@ export class CubeFace {
 
   isSquare() {
     const triangleAngles = this.blocks
-      .filter(block => block.shape.shape === 'triangle')
+      .filter(block => block.shape === triangle)
       .map(block => normalizeDegrees(block.angle));
     const kiteAngles = this.blocks
-      .filter(block => block.shape.shape === 'kite')
+      .filter(block => block.shape === kite)
       .map(block => normalizeDegrees(block.angle));
 
     if (triangleAngles.length !== 4 || kiteAngles.length !== 4) {
@@ -87,13 +88,22 @@ export class CubeFace {
       return expectedAngles.every(angle => actualSet.has(angle));
     };
 
+    const hasExactAnglesWithRotation = (actualAngles, expectedAngles, rotation) => {
+      const rotatedExpectedAngles = expectedAngles.map(angle =>
+        normalizeDegrees(angle + rotation)
+      );
+      return hasExactAngles(actualAngles, rotatedExpectedAngles);
+    };
+
     const triangleExpectedAngles = [0, 90, 180, 270];
     const kiteExpectedAngles = [45, 135, 225, 315];
 
-    return (
-      hasExactAngles(triangleAngles, triangleExpectedAngles) &&
-      hasExactAngles(kiteAngles, kiteExpectedAngles)
-    );
+    const candidateRotations = [...new Set(triangleAngles.map(angle => normalizeDegrees(angle)))];
+
+    return candidateRotations.some(rotation => (
+      hasExactAnglesWithRotation(triangleAngles, triangleExpectedAngles, rotation) &&
+      hasExactAnglesWithRotation(kiteAngles, kiteExpectedAngles, rotation)
+    ));
   }
 }
 
