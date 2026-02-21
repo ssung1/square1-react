@@ -19,6 +19,7 @@ import {
 } from './block';
 import { normalizeDegrees } from './angle';
 import { triangle, kite } from './block-shape';
+import { green } from './block-color';
 
 export const initialTopBlocks = [
   blockTopNorthEast,
@@ -104,6 +105,10 @@ export class CubeFace {
       hasExactAnglesWithRotation(triangleAngles, triangleExpectedAngles, rotation) &&
       hasExactAnglesWithRotation(kiteAngles, kiteExpectedAngles, rotation)
     ));
+  }
+
+  isAllGreen() {
+    return this.blocks.every(block => block.faceColor === green);
   }
 }
 
