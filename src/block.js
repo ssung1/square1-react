@@ -1,6 +1,6 @@
-import { green, white, blue, orange, red, yellow, none } from './block-color';
-import { triangle, kite } from './block-shape';
-import { normalizeDegrees, rotate } from './angle';
+import { green, white, blue, orange, red, yellow, none } from './block-color.js';
+import { triangle, kite } from './block-shape.js';
+import { normalizeDegrees, rotate } from './angle.js';
 
 export class Block {
   constructor(shape, angle, faceColor, sideColor1, sideColor2) {

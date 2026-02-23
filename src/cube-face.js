@@ -1,4 +1,4 @@
-import { green, white, blue, orange, red, yellow, none } from './block-color';
+import { green, white, blue, orange, red, yellow, none } from './block-color.js';
 import {
   blockTopNorth,
   blockTopNorthEast,
@@ -19,9 +19,9 @@ import {
   blockBottomNorthWest,
 
   Block,
-} from './block';
-import { normalizeDegrees } from './angle';
-import { triangle, kite } from './block-shape';
+} from './block.js';
+import { normalizeDegrees } from './angle.js';
+import { triangle, kite } from './block-shape.js';
 
 // export const initialTopBlocks = [
 //   blockTopNorthEast,

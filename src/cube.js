@@ -1,5 +1,5 @@
-import { CubeFace, topFace, bottomFace } from './cube-face';
-import { rotate } from './angle';
+import { CubeFace, topFace, bottomFace } from './cube-face.js';
+import { rotate } from './angle.js';
 
 export class Cube {
   constructor(topFace, bottomFace, executionHistory) {
@@ -79,11 +79,14 @@ export class Cube {
   // 1. rotation of top face: 0 to 9, then A and, B, representing 0 to 330 degrees in 30 degree increments
   // 2. rotation of bottom face: 0 to 9, then A and, B, representing 0 to 330 degrees in 30 degree increments
   // 3. flip: a space character
-  execute(operations) {
+  execute(operations, options = {}) {
+    const { verbose = false } = options;
     let currentCube = this;
 
     for (let index = 0; index < operations.length; index += 3) {
-      console.log('Executing operation:', operations.slice(index, index + 3));
+      if (verbose) {
+        console.log('Executing operation:', operations.slice(index, index + 3));
+      }
       if (index + 2 >= operations.length) {
         return currentCube;
       }

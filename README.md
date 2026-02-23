@@ -30,4 +30,10 @@ Start the application:
 npm run dev
 ```
 
+or if using CLI:
+
+```
+npm run cli
+```
+
 Then go to the URL displayed on the console
