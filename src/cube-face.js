@@ -1,3 +1,4 @@
+import { green, white, blue, orange, red, yellow, none } from './block-color';
 import {
   blockTopNorth,
   blockTopNorthEast,
@@ -15,22 +16,34 @@ import {
   blockBottomSouth,
   blockBottomSouthWest,
   blockBottomWest,
-  blockBottomNorthWest
+  blockBottomNorthWest,
+
+  Block,
 } from './block';
 import { normalizeDegrees } from './angle';
 import { triangle, kite } from './block-shape';
-import { green } from './block-color';
+
+// export const initialTopBlocks = [
+//   blockTopNorthEast,
+//   blockTopEast,
+//   blockTopSouthEast,
+//   blockTopSouth,
+//   blockTopSouthWest,
+//   blockTopWest,
+//   blockTopNorthWest,
+//   blockTopNorth,
+// ]
 
 export const initialTopBlocks = [
-  blockTopNorthEast,
-  blockTopEast,
-  blockTopSouthEast,
-  blockTopSouth,
-  blockTopSouthWest,
-  blockTopWest,
-  blockTopNorthWest,
-  blockTopNorth,
-]
+  new Block(triangle, 0, white, orange, none),
+  new Block(kite, 45, white, yellow, red),
+  new Block(triangle, 90, white, blue, none),
+  new Block(kite, 135, white, orange, yellow),
+  new Block(triangle, 180, white, yellow, none),
+  new Block(kite, 225, white, red, blue),
+  new Block(triangle, 270, white, red, none),
+  new Block(kite, 315, white, blue, orange),
+];
 
 export const initialBottomBlocks = [
   blockBottomNorthEast,
@@ -42,6 +55,41 @@ export const initialBottomBlocks = [
   blockBottomNorthWest,
   blockBottomNorth,
 ]
+
+const solvedTopBlocks = [
+  blockTopNorth,
+  blockTopNorthEast,
+  blockTopEast,
+  blockTopSouthEast,
+  blockTopSouth,
+  blockTopSouthWest,
+  blockTopWest,
+  blockTopNorthWest,
+]
+
+function serializeBlock(block, rotationOffset = 0) {
+  return [
+    block.shape.shape,
+    normalizeDegrees(block.angle + rotationOffset),
+    block.faceColor.color,
+    block.sideColor1.color,
+    block.sideColor2.color,
+  ].join('|');
+}
+
+function setsMatch(firstSet, secondSet) {
+  if (firstSet.size !== secondSet.size) {
+    return false;
+  }
+
+  for (const value of firstSet) {
+    if (!secondSet.has(value)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 // this is the amount of each rotation step
 export const rotationUnit = 30;
@@ -109,6 +157,30 @@ export class CubeFace {
 
   isAllGreen() {
     return this.blocks.every(block => block.faceColor === green);
+  }
+
+  isSolvedAsTop() {
+    if (this.blocks.length !== solvedTopBlocks.length) {
+      return false;
+    }
+
+    const actualBlocks = new Set(this.blocks.map(block => serializeBlock(block)));
+
+    if (actualBlocks.size !== solvedTopBlocks.length) {
+      return false;
+    }
+
+    for (let rotationOffset = 0; rotationOffset < 360; rotationOffset += 30) {
+      const expectedBlocks = new Set(
+        solvedTopBlocks.map(block => serializeBlock(block, rotationOffset))
+      );
+
+      if (setsMatch(actualBlocks, expectedBlocks)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

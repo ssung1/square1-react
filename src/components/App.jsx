@@ -67,11 +67,13 @@ function convertToDisplayableShapes(face) {
 
 function App() {
   // breadth first search
-  const cubeStates = useMemo(() => breadthFirstSearch(cube, 2), []);
+  const cubeStates = useMemo(() => breadthFirstSearch(cube, 3), []);
   // one-off test
-  const cubeStatesX = useMemo(() => [cube.execute('20 ').execute('02 ')], []);
+  // const cubeStates = useMemo(() => [cube.execute('10 00 ')], []);
 
-  const cubeVisuals = cubeStates.filter(cubeState => cubeState.isSquare()).map((cubeState, index) => (
+  const cubeVisuals = cubeStates
+    .filter(cubeState => cubeState.topFace.isSolvedAsTop())
+    .map((cubeState, index) => (
     <CubeVisual key={index} {...convertToCubeComponent(cubeState)} />
   ))
 

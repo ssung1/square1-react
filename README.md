@@ -2,8 +2,7 @@
 
 # Build + Run
 
-Optionally, either edit block.js or cube-face.js to set the initial state
-of the cube
+Optionally, either edit cube-face.js to set the initial state of the cube
 
 In App.jsx, if looking for a solution, do a search
 
@@ -13,8 +12,9 @@ In App.jsx, if looking for a solution, do a search
 
 then filter by
 
-- cubeState.isSquire(): only display cubes in a square face state
+- cubeState.isSquare(): only display cubes in a square face state
 - cubeState.isAllGreen(): only display cubes if all the top face is green
+- cubeState.topFace.isSolvedAsTop(): only display cubes if the top face is solved
 
 example:
 
