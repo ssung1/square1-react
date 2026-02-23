@@ -1,16 +1,33 @@
-# React + Vite
+# Square-1 Viewer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Build + Run
 
-Currently, two official plugins are available:
+Optionally, either edit block.js or cube-face.js to set the initial state
+of the cube
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+In App.jsx, if looking for a solution, do a search
 
-## React Compiler
+```
+  const cubeStates = useMemo(() => breadthFirstSearch(cube, depth), []);
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+then filter by
 
-## Expanding the ESLint configuration
+- cubeState.isSquire(): only display cubes in a square face state
+- cubeState.isAllGreen(): only display cubes if all the top face is green
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+example:
+
+```
+  const cubeVisuals = cubeStates.filter(cubeState => cubeState.isSquare()).map((cubeState, index) => (
+    <CubeVisual key={index} {...convertToCubeComponent(cubeState)} />
+  ))
+```
+
+Start the application:
+
+```
+npm run dev
+```
+
+Then go to the URL displayed on the console
