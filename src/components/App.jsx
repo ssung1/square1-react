@@ -6,12 +6,12 @@ import { breadthFirstSearch, cubeStateToStats } from '../search.js';
 
 function App() {
   // breadth first search
-  const cubeStates = useMemo(() => breadthFirstSearch(cube, 3), []);
+  const cubeStates = useMemo(() => breadthFirstSearch(cube, 0), []);
   // one-off test
   // const cubeStates = useMemo(() => [cube.execute('10 00 ')], []);
 
   const cubeVisuals = cubeStates
-    .filter(cubeState => cubeState.topFace.isSolvedAsTop())
+    // .filter(cubeState => cubeState.topFace.isSolvedAsTop())
     .map((cubeState, index) => (
     <CubeVisual key={index} {...cubeStateToStats(cubeState)} />
   ))

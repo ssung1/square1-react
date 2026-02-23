@@ -9,19 +9,106 @@ import {
   blockTopWest,
   blockTopNorthWest,
 
-  blockBottomNorth,
-  blockBottomNorthEast,
-  blockBottomEast,
-  blockBottomSouthEast,
-  blockBottomSouth,
-  blockBottomSouthWest,
-  blockBottomWest,
-  blockBottomNorthWest,
-
   Block,
 } from './block.js';
 import { normalizeDegrees } from './angle.js';
 import { triangle, kite } from './block-shape.js';
+
+const colorByCode = {
+  g: green,
+  w: white,
+  b: blue,
+  o: orange,
+  r: red,
+  y: yellow,
+  n: none,
+};
+
+function parseColor(code, token) {
+  const color = colorByCode[code.toLowerCase()];
+
+  if (!color) {
+    throw new Error(`Invalid color code "${code}" in token "${token}"`);
+  }
+
+  return color;
+}
+
+function parseFaceColor(code, token) {
+  const color = parseColor(code, token);
+
+  if (color !== white && color !== green) {
+    throw new Error(`Face color must be white (w) or green (g) in token "${token}"`);
+  }
+
+  return color;
+}
+
+// this is the amount of each rotation step
+export const rotationUnit = 30;
+
+export function createCubeFace(blockString) {
+  if (typeof blockString !== 'string') {
+    throw new Error('createCubeFace requires a string block definition');
+  }
+
+  const tokens = blockString.trim().split(/\s+/).filter(Boolean);
+
+  if (tokens.length === 0) {
+    throw new Error('createCubeFace requires at least one block token');
+  }
+
+  const firstShapeCode = tokens[0][0]?.toLowerCase();
+  if (firstShapeCode !== 't' && firstShapeCode !== 'k') {
+    throw new Error(`Block token must start with "t" or "k": "${tokens[0]}"`);
+  }
+
+  const blocks = [];
+  let angleCursor = firstShapeCode === 'k' ? 330 : 0;
+  let totalDegrees = 0;
+
+  tokens.forEach((token) => {
+    const normalizedToken = token.toLowerCase();
+    const shapeCode = normalizedToken[0];
+
+    if (shapeCode === 't') {
+      if (normalizedToken.length !== 3) {
+        throw new Error(`Triangle token must be exactly 3 characters: "${token}"`);
+      }
+
+      const faceColor = parseFaceColor(normalizedToken[1], token);
+      const sideColor1 = parseColor(normalizedToken[2], token);
+
+      blocks.push(new Block(triangle, normalizeDegrees(angleCursor), faceColor, sideColor1, none));
+      angleCursor += rotationUnit;
+      totalDegrees += rotationUnit;
+      return;
+    }
+
+    if (shapeCode === 'k') {
+      if (normalizedToken.length !== 4) {
+        throw new Error(`Kite token must be exactly 4 characters: "${token}"`);
+      }
+
+      const faceColor = parseFaceColor(normalizedToken[1], token);
+      const sideColor1 = parseColor(normalizedToken[2], token);
+      const sideColor2 = parseColor(normalizedToken[3], token);
+
+      blocks.push(new Block(kite, normalizeDegrees(angleCursor + 15), faceColor, sideColor1, sideColor2));
+      angleCursor += rotationUnit * 2;
+      totalDegrees += rotationUnit * 2;
+      return;
+    }
+
+    throw new Error(`Block token must start with "t" or "k": "${token}"`);
+  });
+
+  if (totalDegrees !== 360) {
+    throw new Error(`Block definition must total 360 degrees, got ${totalDegrees}`);
+  }
+
+  return new CubeFace(blocks);
+}
 
 // export const initialTopBlocks = [
 //   blockTopNorthEast,
@@ -33,28 +120,6 @@ import { triangle, kite } from './block-shape.js';
 //   blockTopNorthWest,
 //   blockTopNorth,
 // ]
-
-export const initialTopBlocks = [
-  new Block(triangle, 0, white, orange, none),
-  new Block(kite, 45, white, yellow, red),
-  new Block(triangle, 90, white, blue, none),
-  new Block(kite, 135, white, orange, yellow),
-  new Block(triangle, 180, white, yellow, none),
-  new Block(kite, 225, white, red, blue),
-  new Block(triangle, 270, white, red, none),
-  new Block(kite, 315, white, blue, orange),
-];
-
-export const initialBottomBlocks = [
-  blockBottomNorthEast,
-  blockBottomEast,
-  blockBottomSouthEast,
-  blockBottomSouth,
-  blockBottomSouthWest,
-  blockBottomWest,
-  blockBottomNorthWest,
-  blockBottomNorth,
-]
 
 const solvedTopBlocks = [
   blockTopNorth,
@@ -90,9 +155,6 @@ function setsMatch(firstSet, secondSet) {
 
   return true;
 }
-
-// this is the amount of each rotation step
-export const rotationUnit = 30;
 
 export class CubeFace {
   // IMPORTANT:
@@ -184,5 +246,8 @@ export class CubeFace {
   }
 }
 
-export const topFace = new CubeFace(initialTopBlocks);
-export const bottomFace = new CubeFace(initialBottomBlocks);
+const initialTopFace = createCubeFace('kwyr twb kwoy twy kwrb twr kwbo two');
+const initialBottomFace = createCubeFace('tgr kgrb tgb kgbo tgo kgoy tgy kgyr');
+
+export const topFace = initialTopFace;
+export const bottomFace = initialBottomFace;

@@ -2,7 +2,19 @@
 
 # Build + Run
 
-Optionally, either edit cube-face.js to set the initial state of the cube
+Optionally, either edit cube-face.js to set the initial state of the cube;
+the syntax for each cube is "shape + face color + side color1 + side color2", where
+
+- shape: t for triangle, k for kite, and w for square
+- face color: r for red, g for green
+- side color: r for red, y for yellow, b for blue, and o for orange
+
+example:
+
+```
+const initialTopFace = createCubeFace('two kwyr twb kwoy twy kwrb twr kwbo');
+const initialBottomFace = createCubeFace('tgr kgrb tgb kgbo tgo kgoy tgy kgyr');
+```
 
 In App.jsx, if looking for a solution, do a search
 
