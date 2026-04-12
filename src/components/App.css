@@ -25,22 +25,20 @@
 }
 
 .triangle {
-  position: relative;
-  background: #000;
+  display: block;
   transform-origin: center;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
 
 .triangle-fill {
   position: absolute;
   inset: 2px;
+  inset-block-start: 10px;
   background: #646cff;
   clip-path: inherit;
 }
 
 .kite {
-  position: relative;
-  background: #000;
+  display: block;
   transform-origin: center;
 }
 

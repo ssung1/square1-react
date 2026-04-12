@@ -49,6 +49,8 @@ function convertToDisplayableShapes(face) {
     shape: block.shape.shape,
     angle: block.angle,
     color: block.faceColor.color,
+    sideColor1: block.sideColor1.color,
+    sideColor2: block.sideColor2.color,
   }));
 }
 

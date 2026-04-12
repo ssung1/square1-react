@@ -2,6 +2,8 @@ import { memo, useMemo } from 'react'
 import { normalizeDegrees } from '../angle';
 
 const degToRad = (degrees) => (degrees * Math.PI) / 180
+const BORDER_THICKNESS = 2
+const SHORT_EDGE_MULTIPLIER = 5
 
 const rotatePoint = (point, radians) => ({
   x: point.x * Math.cos(radians) - point.y * Math.sin(radians),
@@ -55,6 +57,11 @@ const getKiteGeometry = (longSideLength) => {
   const width = maxX - minX
   const height = maxY - minY
 
+  const normalizedPoints = screenPoints.map((point) => ({
+    x: point.x - minX,
+    y: point.y - minY,
+  }))
+
   const clipPath = `polygon(${screenPoints
     .map((point) => {
       const xPercent = ((point.x - minX) / width) * 100
@@ -63,11 +70,30 @@ const getKiteGeometry = (longSideLength) => {
     })
     .join(', ')})`
 
+  const edgeData = normalizedPoints.map((point, index) => {
+    const nextPoint = normalizedPoints[(index + 1) % normalizedPoints.length]
+    const dx = nextPoint.x - point.x
+    const dy = nextPoint.y - point.y
+
+    return {
+      start: point,
+      end: nextPoint,
+      length: Math.hypot(dx, dy),
+      midpointX: (point.x + nextPoint.x) / 2,
+    }
+  })
+
+  const sortedEdgesByLength = [...edgeData].sort((a, b) => a.length - b.length)
+  const shortEdges = sortedEdgesByLength.slice(0, 2).sort((a, b) => a.midpointX - b.midpointX)
+
   return {
     clipPath,
     width,
     height,
     aspectRatio: `${width} / ${height}`,
+    svgPoints: normalizedPoints.map((point) => `${point.x},${point.y}`).join(' '),
+    leftShortEdge: shortEdges[0],
+    rightShortEdge: shortEdges[1],
     inwardOffset: {
       x: screenPoints[0].x - (minX + width / 2),
       y: screenPoints[0].y - (minY + height / 2),
@@ -89,22 +115,37 @@ function Triangle({
   sideLength = 176,
   color = '#646cff',
   borderColor = '#000',
+  sideColor1 = borderColor,
 }) {
   const { width, height } = getTriangleDimensionsFromSide(sideLength)
+  const borderThickness = BORDER_THICKNESS
+  const shortEdgeThickness = BORDER_THICKNESS * SHORT_EDGE_MULTIPLIER
 
   return (
-    <div
+    <svg
       className="triangle"
-      style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        transform: `rotate(${rotation}deg)`,
-        background: borderColor,
-      }}
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ transform: `rotate(${rotation}deg)` }}
       aria-label="triangle shape"
     >
-      <div className="triangle-fill" style={{ background: color }} />
-    </div>
+      <polygon
+        points={`0,0 ${width},0 ${width / 2},${height}`}
+        fill={color}
+        stroke={borderColor}
+        strokeWidth={borderThickness}
+      />
+      <line
+        x1="0"
+        y1={shortEdgeThickness / 2}
+        x2={width}
+        y2={shortEdgeThickness / 2}
+        stroke={sideColor1}
+        strokeWidth={shortEdgeThickness}
+        strokeLinecap="butt"
+      />
+    </svg>
   )
 }
 
@@ -113,30 +154,47 @@ function Kite({
   longSideLength = 176,
   color = '#61dafb',
   borderColor = '#000',
+  sideColor1 = borderColor,
+  sideColor2 = borderColor,
 }) {
   const kiteGeometry = getKiteGeometry(longSideLength)
+  const borderThickness = BORDER_THICKNESS
+  const shortEdgeThickness = BORDER_THICKNESS * SHORT_EDGE_MULTIPLIER
 
   return (
-    <div
+    <svg
       className="kite"
+      width={kiteGeometry.width}
+      height={kiteGeometry.height}
+      viewBox={`0 0 ${kiteGeometry.width} ${kiteGeometry.height}`}
       style={{
-        width: `${kiteGeometry.width}px`,
-        height: `${kiteGeometry.height}px`,
         transform: `rotate(${rotation}deg)`,
-        background: borderColor,
-        clipPath: kiteGeometry.clipPath,
-        aspectRatio: kiteGeometry.aspectRatio,
       }}
       aria-label="kite shape"
     >
-      <div
-        className="kite-fill"
-        style={{
-          clipPath: kiteGeometry.clipPath,
-          background: color,
-        }}
+      <polygon
+        points={kiteGeometry.svgPoints}
+        fill={color}
+        stroke={borderColor}
+        strokeWidth={borderThickness}
       />
-    </div>
+      <line
+        x1={kiteGeometry.leftShortEdge.start.x}
+        y1={kiteGeometry.leftShortEdge.start.y}
+        x2={kiteGeometry.leftShortEdge.end.x}
+        y2={kiteGeometry.leftShortEdge.end.y}
+        stroke={sideColor1}
+        strokeWidth={shortEdgeThickness}
+      />
+      <line
+        x1={kiteGeometry.rightShortEdge.start.x}
+        y1={kiteGeometry.rightShortEdge.start.y}
+        x2={kiteGeometry.rightShortEdge.end.x}
+        y2={kiteGeometry.rightShortEdge.end.y}
+        stroke={sideColor2}
+        strokeWidth={shortEdgeThickness}
+      />
+    </svg>
   )
 }
 
@@ -178,6 +236,7 @@ function arrangeFace(
           sideLength={triangleSideLength}
           color={color}
           borderColor={borderColor}
+          sideColor1={item.sideColor1}
         />
       )
     }
@@ -189,6 +248,8 @@ function arrangeFace(
           longSideLength={kiteLongSideLength}
           color={color}
           borderColor={borderColor}
+          sideColor1={item.sideColor1}
+          sideColor2={item.sideColor2}
         />
       )
     }
