@@ -64,7 +64,7 @@ export function createCubeFace(blockString) {
   }
 
   const blocks = [];
-  let angleCursor = firstShapeCode === 'k' ? 330 : 0;
+  let angleCursor = 15;
   let totalDegrees = 0;
 
   tokens.forEach((token) => {
@@ -158,9 +158,9 @@ function setsMatch(firstSet, secondSet) {
 
 export class CubeFace {
   // IMPORTANT:
-  // the flip plane is always 15 degrees clockwise from the vertical axis
+  // the flip plane is always 30 degrees clockwise from the vertical axis
   constructor(blocks) {
-    this.flipPlane = 15;
+    this.flipPlane = 30;
     this.blocks = blocks;
   }
 
@@ -170,8 +170,8 @@ export class CubeFace {
     );
   }
 
-  // the face is flippable if there is an edge at 15 AND if there's an edge at
-  // 195 (15 + 180)
+  // the face is flippable if there is an edge at 30 AND if there's an edge at
+  // 210 (30 + 180)
   isFlippable() {
     const hasFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === this.flipPlane);
     const hasOppositeFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === (this.flipPlane + 180) % 360);
@@ -246,7 +246,7 @@ export class CubeFace {
   }
 }
 
-const initialTopFace = createCubeFace('kwyr twb kwoy twy kwrb twr kwbo two');
+const initialTopFace = createCubeFace('twb kwoy twy kwrb twr kwbo two kwyr');
 const initialBottomFace = createCubeFace('tgr kgrb tgb kgbo tgo kgoy tgy kgyr');
 
 export const topFace = initialTopFace;

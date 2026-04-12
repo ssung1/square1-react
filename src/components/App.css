@@ -29,21 +29,7 @@
   transform-origin: center;
 }
 
-.triangle-fill {
-  position: absolute;
-  inset: 2px;
-  inset-block-start: 10px;
-  background: #646cff;
-  clip-path: inherit;
-}
-
 .kite {
   display: block;
   transform-origin: center;
-}
-
-.kite-fill {
-  position: absolute;
-  inset: 2px;
-  background: #61dafb;
 }

@@ -32,7 +32,7 @@ export class Block {
   flip() {
     return new Block(
       this.shape,
-      normalizeDegrees(210 - this.angle),
+      normalizeDegrees(240 - this.angle),
       this.faceColor,
       this.sideColor2,
       this.sideColor1
@@ -40,21 +40,21 @@ export class Block {
   }
 }
 // top
-export const blockTopNorth = new Block(triangle, 0, white, red, none);
-export const blockTopNorthEast = new Block(kite, 45, white, red, blue);
-export const blockTopEast = new Block(triangle, 90, white, blue, none);
-export const blockTopSouthEast = new Block(kite, 135, white, blue, orange);
-export const blockTopSouth = new Block(triangle, 180, white, orange, none);
-export const blockTopSouthWest = new Block(kite, 225, white, orange, yellow);
-export const blockTopWest = new Block(triangle, 270, white, yellow, none);
-export const blockTopNorthWest = new Block(kite, 315, white, yellow, red);
+export const blockTopNorth = new Block(triangle, 15, white, red, none);
+export const blockTopNorthEast = new Block(kite, 60, white, red, blue);
+export const blockTopEast = new Block(triangle, 105, white, blue, none);
+export const blockTopSouthEast = new Block(kite, 150, white, blue, orange);
+export const blockTopSouth = new Block(triangle, 195, white, orange, none);
+export const blockTopSouthWest = new Block(kite, 240, white, orange, yellow);
+export const blockTopWest = new Block(triangle, 285, white, yellow, none);
+export const blockTopNorthWest = new Block(kite, 330, white, yellow, red);
 
 // bottom
-export const blockBottomNorth = new Block(triangle, 0, green, red, none);
-export const blockBottomNorthEast = new Block(kite, 45, green, red, blue);
-export const blockBottomEast = new Block(triangle, 90, green, blue, none);
-export const blockBottomSouthEast = new Block(kite, 135, green, blue, orange);
-export const blockBottomSouth = new Block(triangle, 180, green, orange, none);
-export const blockBottomSouthWest = new Block(kite, 225, green, orange, yellow);
-export const blockBottomWest = new Block(triangle, 270, green, yellow, none);
-export const blockBottomNorthWest = new Block(kite, 315, green, yellow, red);
+export const blockBottomNorth = new Block(triangle, 15, green, red, none);
+export const blockBottomNorthEast = new Block(kite, 60, green, red, blue);
+export const blockBottomEast = new Block(triangle, 105, green, blue, none);
+export const blockBottomSouthEast = new Block(kite, 150, green, blue, orange);
+export const blockBottomSouth = new Block(triangle, 195, green, orange, none);
+export const blockBottomSouthWest = new Block(kite, 240, green, orange, yellow);
+export const blockBottomWest = new Block(triangle, 285, green, yellow, none);
+export const blockBottomNorthWest = new Block(kite, 330, green, yellow, red);

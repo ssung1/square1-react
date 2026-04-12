@@ -120,6 +120,7 @@ function Triangle({
   const { width, height } = getTriangleDimensionsFromSide(sideLength)
   const borderThickness = BORDER_THICKNESS
   const shortEdgeThickness = BORDER_THICKNESS * SHORT_EDGE_MULTIPLIER
+  const shortEdgeColor = sideColor1 === 'none' ? borderColor : sideColor1
 
   return (
     <svg
@@ -127,7 +128,7 @@ function Triangle({
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      style={{ transform: `rotate(${rotation}deg)` }}
+      style={{ transform: `rotate(${rotation}deg)`, overflow: 'visible' }}
       aria-label="triangle shape"
     >
       <polygon
@@ -138,10 +139,10 @@ function Triangle({
       />
       <line
         x1="0"
-        y1={shortEdgeThickness / 2}
+        y1="0"
         x2={width}
-        y2={shortEdgeThickness / 2}
-        stroke={sideColor1}
+        y2="0"
+        stroke={shortEdgeColor}
         strokeWidth={shortEdgeThickness}
         strokeLinecap="butt"
       />
@@ -160,6 +161,8 @@ function Kite({
   const kiteGeometry = getKiteGeometry(longSideLength)
   const borderThickness = BORDER_THICKNESS
   const shortEdgeThickness = BORDER_THICKNESS * SHORT_EDGE_MULTIPLIER
+  const leftShortEdgeColor = sideColor1 === 'none' ? borderColor : sideColor1
+  const rightShortEdgeColor = sideColor2 === 'none' ? borderColor : sideColor2
 
   return (
     <svg
@@ -183,7 +186,7 @@ function Kite({
         y1={kiteGeometry.leftShortEdge.start.y}
         x2={kiteGeometry.leftShortEdge.end.x}
         y2={kiteGeometry.leftShortEdge.end.y}
-        stroke={sideColor1}
+        stroke={leftShortEdgeColor}
         strokeWidth={shortEdgeThickness}
       />
       <line
@@ -191,7 +194,7 @@ function Kite({
         y1={kiteGeometry.rightShortEdge.start.y}
         x2={kiteGeometry.rightShortEdge.end.x}
         y2={kiteGeometry.rightShortEdge.end.y}
-        stroke={sideColor2}
+        stroke={rightShortEdgeColor}
         strokeWidth={shortEdgeThickness}
       />
     </svg>
