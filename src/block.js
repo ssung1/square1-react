@@ -32,7 +32,7 @@ export class Block {
   flip() {
     return new Block(
       this.shape,
-      normalizeDegrees(240 - this.angle),
+      normalizeDegrees(180 - this.angle),
       this.faceColor,
       this.sideColor2,
       this.sideColor1

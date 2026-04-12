@@ -158,9 +158,9 @@ function setsMatch(firstSet, secondSet) {
 
 export class CubeFace {
   // IMPORTANT:
-  // the flip plane is always 30 degrees clockwise from the vertical axis
+  // the flip plane is always aligned with the vertical axis
   constructor(blocks) {
-    this.flipPlane = 30;
+    this.flipPlane = 0;
     this.blocks = blocks;
   }
 
@@ -170,8 +170,8 @@ export class CubeFace {
     );
   }
 
-  // the face is flippable if there is an edge at 30 AND if there's an edge at
-  // 210 (30 + 180)
+  // the face is flippable if there is an edge at 0 AND if there's an edge at
+  // 180 (0 + 180)
   isFlippable() {
     const hasFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === this.flipPlane);
     const hasOppositeFlipPlaneEdge = this.blocks.some(block => block.edgeAngleClockwise() === (this.flipPlane + 180) % 360);
