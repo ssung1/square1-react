@@ -12,6 +12,8 @@ function App() {
 
   const cubeVisuals = cubeStates
     // .filter(cubeState => cubeState.topFace.isSolvedAsTop())
+    // .filter(cubeState => cubeState.topFace.isSquare())
+    // .filter(cubeState => cubeState.bottomFace.isAllGreen())
     .map((cubeState, index) => (
     <CubeVisual key={index} {...cubeStateToStats(cubeState)} />
   ))
