@@ -246,8 +246,8 @@ export class CubeFace {
   }
 }
 
-const initialTopFace = createCubeFace('twb kwoy twy kwrb twr kwbo two kwyr');
-const initialBottomFace = createCubeFace('tgr kgrb tgb kgbo tgo kgoy tgy kgyr');
+const initialTopFace = createCubeFace('kwrb twb kwbo two kwoy twy kwyr twr');
+const initialBottomFace = createCubeFace('kgrb tgb kgbo tgo kgoy tgy kgyr tgr');
 
 export const topFace = initialTopFace;
 export const bottomFace = initialBottomFace;
