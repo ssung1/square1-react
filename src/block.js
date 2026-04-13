@@ -34,8 +34,8 @@ export class Block {
       this.shape,
       normalizeDegrees(180 - this.angle),
       this.faceColor,
+      this.sideColor1,
       this.sideColor2,
-      this.sideColor1
     );
   }
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test:regression": "node scripts/regression-checks.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "cli": "node cli.js"
